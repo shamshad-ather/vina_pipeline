@@ -45,16 +45,16 @@ The pipeline is designed to be modular and run via a master script.
 The project expects the following structure. You need to create the `receptors` and `ligands` directories and populate them with your input files. The other directories will be created automatically by the pipeline.
 
 ```
-MyDockingProject/
+vina_pipeline/
 ├── ligands/ # INPUT: Place your original ligand files here (SDF, MOL2, etc.)
 ├── receptors/ # INPUT: Place your original receptor PDB files here
 ├── src/ # Contains all executable pipeline scripts
-│ ├── 01_prepare_receptors.sh
-│ ├── 02_prepare_ligands.sh
-│ ├── 03_generate_configs.sh
-│ ├── 04_run_docking.sh
-│ ├── 05_extract_analyze_results.sh
-│ ├── 06_plot_results.py
+│ ├── 1_receptor_prep.sh
+│ ├── 2_ligand_prep.sh
+│ ├── 3_config_calc.sh
+│ ├── 4_run_vina.sh
+│ ├── 5_analyze_results.sh
+│ ├── 6_plot_results.py
 │ ├── calc_box_center.py
 │ └── calculate_docking_metrics.py
 └── master.sh # Main script to run the entire pipeline
@@ -134,50 +134,32 @@ Upon successful completion, the following outputs will be generated in the main 
 ## Script Descriptions
 
 *   **`master.sh`**: Orchestrates the execution of all pipeline steps in order.
-*   **`src/01_prepare_receptors.sh`**: Prepares receptor PDB files using Open Babel.
-*   **`src/02_prepare_ligands.sh`**: Prepares ligand files (detecting format) using Open Babel.
-*   **`src/03_generate_configs.sh`**: Calls `calc_box_center.py` for each receptor to generate Vina config files.
+*   **`src/1_receptor_prep.sh`**: Prepares receptor PDB files using Open Babel.
+*   **`src/2_ligand_prep.sh`**: Prepares ligand files (detecting format) using Open Babel.
+*   **`src/3_config_calc.sh`**: Calls `calc_box_center.py` for each receptor to generate Vina config files.
 *   **`src/calc_box_center.py`**: Calculates Vina docking box parameters covering the entire receptor.
-*   **`src/04_run_docking.sh`**: Runs AutoDock Vina for all receptor-ligand pairs.
-*   **`src/05_extract_analyze_results.sh`**: Calls `calculate_docking_metrics.py` for each docking log to parse results and calculate metrics, compiling them into the summary CSV.
+*   **`src/4_run_vina.sh`**: Runs AutoDock Vina for all receptor-ligand pairs.
+*   **`src/5_analyze_results.sh`**: Calls `calculate_docking_metrics.py` for each docking log to parse results and calculate metrics, compiling them into the summary CSV.
 *   **`src/calculate_docking_metrics.py`**: Parses individual Vina logs, uses RDKit to calculate properties and efficiency metrics.
-*   **`src/06_plot_results.py`**: Reads the summary CSV and generates various analysis plots using Matplotlib and Seaborn.
+*   **`src/6_plot_results.py`**: Reads the summary CSV and generates various analysis plots using Matplotlib and Seaborn.
 
 ## Customization
 
-*   **Vina Parameters:** Modify `EXHAUSTIVENESS` and `NUM_MODES` in `src/04_run_docking.sh`.
-*   **Docking Box:** Change the `BUFFER_SIZE` in `src/03_generate_configs.sh`. For **focused docking**, you would need to significantly modify `src/calc_box_center.py` or generate config files manually based on known binding sites.
-*   **Ligand Formats:** Add support for more input formats in the `case` statement within `src/02_prepare_ligands.sh`.
-*   **Multi-Molecule Ligand Files:** If your input files (e.g., SDF) contain multiple molecules per file and you want to dock *all* of them, uncomment the `-m` flag in the `obabel` command within `src/02_prepare_ligands.sh`. Note this will change output naming in `ligands_pdbqt/`.
-*   **Plotting:** Adjust `TOP_N_LIGANDS`, plot styles, selected metrics for pair plots, etc., in `src/06_plot_results.py`.
-*   **Error Handling:** The pipeline uses `set -e` in most bash scripts to stop on error. `05_extract_analyze_results.sh` currently has this commented out to allow processing remaining logs even if one fails; you can change this behaviour.
+*   **Vina Parameters:** Modify `EXHAUSTIVENESS` and `NUM_MODES` in `src/4_run_vina.sh`.
+*   **Docking Box:** Change the `BUFFER_SIZE` in `src/3_config_calc.sh`. For **focused docking**, you would need to significantly modify `src/calc_box_center.py` or generate config files manually based on known binding sites.
+*   **Ligand Formats:** Add support for more input formats in the `case` statement within `src/2_ligand_prep.sh`.
+*   **Multi-Molecule Ligand Files:** If your input files (e.g., SDF) contain multiple molecules per file and you want to dock *all* of them, uncomment the `-m` flag in the `obabel` command within `src/2_ligand_prep.sh`. Note this will change output naming in `ligands_pdbqt/`.
+*   **Plotting:** Adjust `TOP_N_LIGANDS`, plot styles, selected metrics for pair plots, etc., in `src/6_plot_results.py`.
+*   **Error Handling:** The pipeline uses `set -e` in most bash scripts to stop on error. `5_analyze_results.sh` currently has this commented out to allow processing remaining logs even if one fails; you can change this behaviour.
 
 ## Citation
 
 If you use this pipeline or its components in your research, please cite the relevant software:
 
-*   **AutoDock Vina:**
-    *   J. Eberhardt, D. Santos-Martins, A. F. Tillack, and S. Forli, AutoDock Vina 1.2.0: New Docking Methods, Expanded Force Field, and Python Bindings, J. Chem. Inf. Model. (2021) DOI: 10.1021/acs.jcim.1c00203
-    *   O. Trott, A. J. Olson, AutoDock Vina: improving the speed and accuracy of docking with a new scoring function, efficient optimization and multithreading, J. Comp. Chem. (2010) DOI: 10.1002/jcc.21334
-*   **Open Babel:**
-    *   N M O'Boyle et al., "Open Babel: An open chemical toolbox." J Cheminform (2011) 3:33. DOI: 10.1186/1758-2946-3-33
-*   **RDKit:**
-    *   RDKit: Open-source cheminformatics; http://www.rdkit.org
-*   **NumPy:**
-    *   Harris, C.R., Millman, K.J., van der Walt, S.J. et al. Array programming with NumPy. Nature 585, 357–362 (2020). DOI: 10.1038/s41586-020-2649-2
-*   **Pandas:**
-    *   Wes McKinney. Data Structures for Statistical Computing in Python, Proceedings of the 9th Python in Science Conference, 51-56 (2010)
-    *   pandas development team. pandas-dev/pandas: Pandas (DOI: 10.5281/zenodo.3509134)
-*   **Matplotlib:**
-    *   J. D. Hunter, "Matplotlib: A 2D Graphics Environment", Computing in Science & Engineering, vol. 9, no. 3, pp. 90-95, (2007) DOI: 10.1109/MCSE.2007.55
-*   **Seaborn:**
-    *   Michael L. Waskom, "Seaborn: statistical data visualization", Journal of Open Source Software, 6(60), 3021, (2021) DOI: 10.21105/joss.03021
-
-## License
-
-(Optional: Consider adding a license file, e.g., MIT, Apache 2.0, if you plan to share this project.)
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
+*   **AutoDock Vina**
+*   **Open Babel**
+*   **RDKit**
+*   **NumPy**
+*   **Pandas**
+*   **Matplotlib**
+*   **Seaborn**
