@@ -17,15 +17,15 @@ The pipeline is designed to be modular and run via a master script.
 1.  **Clone or Download:** Get the project files onto your system. If using Git:
     ```bash
     git clone <repository_url>
-    cd MyDockingProject # Or your chosen project directory name
+    cd vina_pipeline
     ```
     If you downloaded a ZIP, extract it.
 
 2.  **Create Conda Environment:** Create a dedicated environment and install necessary packages. This command includes Vina:
     ```bash
-    conda create --name docking_env -c conda-forge openbabel rdkit vina python=3.9 numpy pandas matplotlib seaborn -y
+    conda create --name docking_env -c conda-forge openbabel rdkit vina python=3.12.9 numpy pandas matplotlib seaborn -y
     ```
-    *(You can adjust the `python=3.9` version if needed, but ensure compatibility with the libraries. Using a specific version like 3.9, 3.10, or 3.11 is often more stable than the latest).*
+    
 
 3.  **Activate Environment:** Before running the pipeline, always activate the environment:
     ```bash
@@ -44,7 +44,7 @@ The pipeline is designed to be modular and run via a master script.
 
 The project expects the following structure. You need to create the `receptors` and `ligands` directories and populate them with your input files. The other directories will be created automatically by the pipeline.
 
-
+```
 MyDockingProject/
 ├── ligands/ # INPUT: Place your original ligand files here (SDF, MOL2, etc.)
 ├── receptors/ # INPUT: Place your original receptor PDB files here
@@ -57,17 +57,17 @@ MyDockingProject/
 │ ├── 06_plot_results.py
 │ ├── calc_box_center.py
 │ └── calculate_docking_metrics.py
-├── master.sh # Main script to run the entire pipeline
-
+└── master.sh # Main script to run the entire pipeline
+```
 --- Output directories will be created here ---
-
+```
 ├── receptors_pdbqt/ # OUTPUT: Prepared receptors in PDBQT format
 ├── ligands_pdbqt/ # OUTPUT: Prepared ligands in PDBQT format
 ├── configs/ # OUTPUT: Vina configuration files (.txt)
 ├── docking_results/ # OUTPUT: Raw docking results (poses, logs) per pair
 ├── plots/ # OUTPUT: Generated analysis plots (.png)
 └── docking_summary_metrics.csv # OUTPUT: Final summary table
-
+```
 ## Input Data Preparation
 
 1.  **Receptors:** Place your receptor protein structures in PDB format (`.pdb`) inside the `receptors/` directory.
