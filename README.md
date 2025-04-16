@@ -83,7 +83,7 @@ vina_pipeline/
     conda activate docking_env
     ```
 
-2.  **Navigate to Project Root:** Make sure you are in the main project directory (`MyDockingProject/`).
+2.  **Navigate to Project Root:** Make sure you are in the main project directory (`vina_pipeline/`).
 
 3.  **Make Scripts Executable (if needed):** This usually only needs to be done once.
     ```bash
