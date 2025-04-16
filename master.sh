@@ -41,7 +41,7 @@ echo ""
 echo "========================================="
 echo " STEP 5: Extracting & Analyzing Results"
 echo "========================================="
-bash "${SRC_DIR}/05_extract_analyze_results.sh"
+bash "${SRC_DIR}/5_analyze_results.sh"
 echo " Results analysis finished."
 echo ""
 
@@ -49,7 +49,7 @@ echo "========================================="
 echo " STEP 6: Generating Plots              "
 echo "========================================="
 # Plotting script is Python, execute with python interpreter
-python "${SRC_DIR}/06_plot_results.py"
+python "${SRC_DIR}/6_plot_results.py"
 echo " Plot generation finished."
 echo ""
 
