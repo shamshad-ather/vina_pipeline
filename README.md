@@ -16,7 +16,7 @@ The pipeline is designed to be modular and run via a master script.
 
 1.  **Clone or Download:** Get the project files onto your system. If using Git:
     ```bash
-    git clone <repository_url>
+    git clone https://github.com/shamshad-ather/vina_pipeline.git
     cd vina_pipeline
     ```
     If you downloaded a ZIP, extract it.
