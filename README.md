@@ -23,13 +23,13 @@ The pipeline is designed to be modular and run via a master script.
 
 2.  **Create Conda Environment:** Create a dedicated environment and install necessary packages. This command includes Vina:
     ```bash
-    conda create --name docking_env -c conda-forge openbabel rdkit vina python=3.12.9 numpy pandas matplotlib seaborn -y
+    conda create --name docking -c conda-forge openbabel rdkit vina python=3.12.9 numpy pandas matplotlib seaborn -y
     ```
     
 
 3.  **Activate Environment:** Before running the pipeline, always activate the environment:
     ```bash
-    conda activate docking_env
+    conda activate docking
     ```
 
 4.  **Verify Installations (Optional but recommended):**
@@ -39,7 +39,11 @@ The pipeline is designed to be modular and run via a master script.
     vina --version       # Check Vina version
     python --version     # Check Python version
     ```
-
+    
+5.  **Install openpyxl**
+    ```bash
+    pip install openpyxl
+    ```
 ## Directory Structure
 
 The project expects the following structure. You need to create the `receptors` and `ligands` directories and populate them with your input files. The other directories will be created automatically by the pipeline.
