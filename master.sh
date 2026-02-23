@@ -15,10 +15,20 @@ echo " STEP 1: Preparing Receptors             "
 echo "========================================="
 bash "${SRC_DIR}/1_receptor_prep.sh"
 echo " Receptor preparation finished."
-echo ""
+
 
 echo "========================================="
 echo " STEP 2: Preparing Ligands               "
+echo "========================================="
+if [ -f "input_smiles.xlsx" ]; then
+    echo "Option 1: List of SMILES detected (input_smiles.xlsx). Generating 3D Structures..."
+    python "${SRC_DIR}/1_5_ligand_gen.py"
+    echo " Ligand structure generation finished."
+else
+    echo "Option 2: Folder of Ligands expected (in ligands/ dir). Skipping 3D generation."
+fi
+echo "========================================="
+echo "Ligand Preparation"
 echo "========================================="
 bash "${SRC_DIR}/2_ligand_prep.sh"
 echo " Ligand preparation finished."
