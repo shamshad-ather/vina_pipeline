@@ -8,10 +8,10 @@ The pipeline is designed to be modular and run via a master script, and supports
 
 ### Quick Start: Choose Your Workflow
 
-| **Workflow**                     | **Input Type**                 | **When to Use**                                                                              |
-| -------------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------- |
-| **Option 1: SMILES**             | Excel file with SMILES strings | You have chemical structures as SMILES notation or want to define compounds programmatically |
-| **Option 2: Pre-prepared Files** | SDF, MOL2, MOL, or PDB files   | You already have 3D structure files ready for docking                                        |
+| **Workflow**                    | **Input Type**                 | **When to Use**                                                                  |
+| ------------------------------- | ------------------------------ | -------------------------------------------------------------------------------- |
+| **Option 1: List of SMILES**    | Excel file with SMILES strings | You have a list of SMILES in prescribed format (CID and SMILES columns)          |
+| **Option 2: Folder of Ligands** | SDF, MOL2, MOL, or PDB files   | You already have a folder of ligand files in prescribed format ready for docking |
 
 **See [Input Data Preparation](#input-data-preparation) below for detailed setup for each workflow.**
 
@@ -74,16 +74,16 @@ vina_pipeline/
 │   ├── Protein_A.pdb (example)
 │   └── ...
 └── src/ # Contains all executable pipeline scripts
-    ├── 1_5_ligand_gen.py
-    ├── 1_receptor_prep.sh
-    ├── 2_ligand_prep.sh
-    ├── 3_config_calc.sh
-    ├── 4_run_vina.sh
-    ├── 5_analyze_results.sh
-    ├── 6_plot_results.py
-    ├── calc_box_center.py
-    ├── calculate_docking_metrics.py
-    └── master.sh # Main script to run the entire pipeline
+│   ├── 1_5_ligand_gen.py
+│   ├── 1_receptor_prep.sh
+│   ├── 2_ligand_prep.sh
+│   ├── 3_config_calc.sh
+│   ├── 4_run_vina.sh
+│   ├── 5_analyze_results.sh
+│   ├── 6_plot_results.py
+│   ├── calc_box_center.py
+│   ├── calculate_docking_metrics.py
+└── master.sh # Main script to run the entire pipeline
 ```
 
 --- Output directories (created automatically) ---
@@ -101,9 +101,9 @@ vina_pipeline/
 
 The pipeline supports **two input workflows** for ligands:
 
-### Workflow Option 1: SMILES Input (via Excel File)
+### Workflow Option 1: List of SMILES (via Excel File)
 
-If you want to provide your ligands as SMILES strings:
+If you have a list of SMILES in the prescribed format:
 
 1. **Create Excel File**: Prepare an Excel file named `input_smiles.xlsx` in the project root directory with the following structure:
    - **Column 1: `CID`** – Compound identifier (used for filenames and results table). Example: `Ellagic_acid`, `Compound_001`
@@ -126,9 +126,9 @@ If you want to provide your ligands as SMILES strings:
 
 **Remove the Excel file after generation to avoid processing the outdated file in future runs.**
 
-### Workflow Option 2: Pre-prepared Ligand Files
+### Workflow Option 2: Folder of Ligands
 
-If you already have ligand files in standard formats:
+If you have a folder of ligands in the prescribed format:
 
 1.  **Place Ligand Files**: Put your ligand molecule files directly into the `ligands/` directory.
     - Supported formats: SDF (`.sdf`), MOL2 (`.mol2`), MOL (`.mol`), PDB (`.pdb`)
@@ -151,14 +151,14 @@ If you already have ligand files in standard formats:
 
 **Choose ONE of the following workflows:**
 
-#### Workflow Option 1: SMILES Input
+#### Workflow Option 1: List of SMILES
 
 1. Create `input_smiles.xlsx` with columns `CID` and `SMILES` (see [Input Data Preparation](#input-data-preparation) for example)
 2. Place receptor PDB files in `receptors/` directory
 3. Ensure `receptors/` and `ligands/` directories exist (create if needed)
 4. Do NOT place any files in `ligands/` for this workflow (they will be generated)
 
-#### Workflow Option 2: Pre-prepared Files
+#### Workflow Option 2: Folder of Ligands
 
 1. Place ligand files (SDF, MOL2, MOL, PDB) in `ligands/` directory
 2. Place receptor PDB files in `receptors/` directory
@@ -263,8 +263,8 @@ Upon successful completion, the following outputs will be generated in the main 
 
 ### Workflow Selection
 
-- **To use Workflow Option 1 (SMILES Input):** Create an `input_smiles.xlsx` file in the project root with columns `CID` and `SMILES`. Run `master.sh`. Ensure the file is deleted or renamed before running the pipeline again.
-- **To use Workflow Option 2 (Pre-prepared Files):** Place ligand files directly in the `ligands/` directory. Ensure NO `input_smiles.xlsx` file exists. Run `master.sh`.
+- **To use Workflow Option 1 (List of SMILES):** Create an `input_smiles.xlsx` file in the project root with columns `CID` and `SMILES`. Run `master.sh`. Ensure the file is deleted or renamed before running the pipeline again.
+- **To use Workflow Option 2 (Folder of Ligands):** Place ligand files directly in the `ligands/` directory. Ensure NO `input_smiles.xlsx` file exists. Run `master.sh`.
 
 ### Advanced Customization
 
