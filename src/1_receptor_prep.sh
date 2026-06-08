@@ -31,8 +31,14 @@ for receptor_pdb in "$RECEPTOR_PDB_DIR"/*.pdb; do
     base_name=$(basename "${receptor_pdb%.pdb}")
     
     # Define file names
-    clean_pdb="${RECEPTOR_PDBQT_DIR}/${base_name}_clean.pdb"
     receptor_pdbqt="${RECEPTOR_PDBQT_DIR}/${base_name}.pdbqt"
+    clean_pdb="${RECEPTOR_PDBQT_DIR}/${base_name}_clean.pdb"
+    
+    # --- Check if the target PDBQT file already exists ---
+    if [ -f "$receptor_pdbqt" ]; then
+        echo "Skipping $base_name: $receptor_pdbqt already exists."
+        continue
+    fi
     
     echo "Processing receptor: $base_name"
     
